@@ -277,12 +277,9 @@ def alumni_dashboard():
 @app.route("/announcements")
 def announcements():
     announcements_list = get_announcements()
-    
-    # CHECK IF ADMIN IS LOGGED IN
-    is_admin = session.get("admin_logged_in", False)
-    
-    # PASS THIS VARIABLE TO THE TEMPLATE
-    return render_template("announcements.html", announcements=announcements_list, is_admin=is_admin)
+    # Removed explicit 'is_admin' variable to match alumni route pattern
+    # The template now checks session.get('admin_logged_in') directly
+    return render_template("announcements.html", announcements=announcements_list)
 
 @app.route("/announcements/add", methods=["GET","POST"])
 def add_announcement():
