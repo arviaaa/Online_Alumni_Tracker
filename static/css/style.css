@@ -314,3 +314,21 @@ body.login-page {
 .btn-delete:hover {
     background-color: #c0392b;  /* darker red on hover */
 }
+form.delete-form {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    display: inline !important;
+    border: none !important;
+}
+.delete-form {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    display: inline-block !important;
+    border: none !important;
+}
