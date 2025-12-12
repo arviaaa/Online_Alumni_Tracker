@@ -25,7 +25,7 @@
           <div class="mb-3">
             <label class="form-label">Program</label>
             <select name="program_id" class="form-select">
-              <option value="">-- Select Program --</option>
+              <option value="">-- All Programs --</option>
               {% for program in programs %}
               <option value="{{ program.program_id }}" {% if announcement and announcement.program_id == program.program_id %}selected{% endif %}>
                 {{ program.program_name }}
@@ -34,11 +34,12 @@
             </select>
           </div>
           <button type="submit" class="btn btn-info w-100">{{ 'Update' if announcement else 'Add' }}</button>
+          <div class="text-center mt-3">
+            <a href="{{ url_for('announcements') }}" class="text-secondary">Cancel</a>
+          </div>
         </form>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
-
-

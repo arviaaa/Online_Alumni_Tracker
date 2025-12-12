@@ -277,13 +277,20 @@ def alumni_dashboard():
 @app.route("/announcements")
 def announcements():
     announcements_list = get_announcements()
-    return render_template("announcements.html", announcements=announcements_list)
+    
+    # CHECK IF ADMIN IS LOGGED IN
+    is_admin = session.get("admin_logged_in", False)
+    
+    # PASS THIS VARIABLE TO THE TEMPLATE
+    return render_template("announcements.html", announcements=announcements_list, is_admin=is_admin)
 
 @app.route("/announcements/add", methods=["GET","POST"])
 def add_announcement():
     if not session.get("admin_logged_in"):
         return redirect(url_for("admin_login"))
+    
     programs = get_programs()
+    
     if request.method == "POST":
         conn = get_db_connection()
         conn.execute("""INSERT INTO events (event_title, event_description, event_date, program_id)
@@ -294,15 +301,19 @@ def add_announcement():
         conn.close()
         flash("Announcement added successfully!", "success")
         return redirect(url_for("announcements"))
-    return render_template("add_announcement.html", programs=programs)
+    
+    # FIX: Use the plural filename "add_announcements.html" and pass announcement=None
+    return render_template("add_announcements.html", programs=programs, announcement=None)
 
 @app.route("/announcements/edit/<int:event_id>", methods=["GET","POST"])
 def edit_announcement(event_id):
     if not session.get("admin_logged_in"):
         return redirect(url_for("admin_login"))
+    
     conn = get_db_connection()
     announcement = conn.execute("SELECT * FROM events WHERE event_id=?", (event_id,)).fetchone()
     programs = get_programs()
+    
     if request.method == "POST":
         conn.execute("""UPDATE events SET event_title=?, event_description=?, event_date=?, program_id=?
                         WHERE event_id=?""",
@@ -312,20 +323,22 @@ def edit_announcement(event_id):
         conn.close()
         flash("Announcement updated successfully!", "success")
         return redirect(url_for("announcements"))
+    
     conn.close()
-    return render_template("edit_announcements.html", announcement=announcement, programs=programs)
+    # FIX: Reuse the "add_announcements.html" template because it handles editing too!
+    return render_template("add_announcements.html", announcement=announcement, programs=programs)
 
 @app.route("/announcements/delete/<int:event_id>", methods=["POST"])
 def delete_announcement(event_id):
     if not session.get("admin_logged_in"):
         return redirect(url_for("admin_login"))
+    
     conn = get_db_connection()
     conn.execute("DELETE FROM events WHERE event_id=?", (event_id,))
     conn.commit()
     conn.close()
     flash("Announcement deleted successfully!", "info")
     return redirect(url_for("announcements"))
-
 # -----------------------------
 # CAREERS ROUTES
 # -----------------------------

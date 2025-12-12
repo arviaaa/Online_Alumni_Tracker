@@ -13,7 +13,14 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#1f3a93;">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Alumni Tracker</a>
+            {% if session.get('admin_logged_in') %}
+                <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">Alumni Tracker</a>
+            {% elif session.get('alumni_logged_in') %}
+                <a class="navbar-brand" href="{{ url_for('alumni_dashboard') }}">Alumni Tracker</a>
+            {% else %}
+                <a class="navbar-brand" href="{{ url_for('index') }}">Alumni Tracker</a>
+            {% endif %}
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
